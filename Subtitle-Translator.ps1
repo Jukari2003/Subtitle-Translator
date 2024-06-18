@@ -1,12 +1,15 @@
-﻿clear-host
-$scriptpath = $MyInvocation.MyCommand.Path
-$dir = Split-Path $scriptpath
-Set-Location $dir
+﻿################################################################################
+#                              Subtitle Translator                             #
+#                           Written By: MSgt Brechtel                          #
+#                                                                              #
+################################################################################
+#####G##########################################################################
 
-#WARNING MAKE SURE OUTPUT DIRECTORY IS EMPTY, IT WILL OVERWRITE ANY FILES IN IT!
+##WARNING MAKE SURE OUTPUT DIRECTORY IS EMPTY, IT WILL OVERWRITE ANY FILES IN IT!
+##Modify the 3 variables below:
 
-$script:target_dir = "Z:\Portal Subtitle Folder"
-$script:output_dir = "C:\TEST"
+$script:input_dir  = "Z:\INPUT DIRECTORY"
+$script:output_dir = "C:\OUTPUT DIRECTORY"
 $script:target_language = "en"
     #Afrikaans = af 
     #Albanian = sq 
@@ -74,6 +77,13 @@ $script:target_language = "en"
     #Welsh = cy 
     #Yiddish = yi
 
+######################DON'T MODIFY BELOW THIS LINE##############################
+######################DON'T MODIFY BELOW THIS LINE##############################
+######################DON'T MODIFY BELOW THIS LINE##############################
+clear-host
+$scriptpath = $MyInvocation.MyCommand.Path
+$dir = Split-Path $scriptpath
+Set-Location $dir
 ################################################################################
 ######Translate Text############################################################
 function translate_text($text)
@@ -94,15 +104,11 @@ function translate_text($text)
     }
     return $Translation
 }
-
-
 ################################################################################
 ######Main######################################################################
 function main
 {
-
-    $files = Get-ChildItem -LiteralPath $script:target_dir -File -ErrorAction SilentlyContinue | where {$_.extension -in ".srt"}
-
+    $files = Get-ChildItem -LiteralPath $script:input_dir -File -ErrorAction SilentlyContinue | where {$_.extension -in ".srt"}
     foreach($file in $files)
     {
         $output_file =$script:output_dir + "\" + $file.BaseName + $file.extension
@@ -111,7 +117,6 @@ function main
             Remove-Item $output_file
         }
         $writer = [System.IO.StreamWriter]::new($output_file)
-
 
         $srt_file = Get-Content -literalpath $file.FullName
         $count = 0;
